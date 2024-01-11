@@ -10,6 +10,9 @@ inputs:
   azure-pipeline-variables: 
     description: 'Set/Overwrite pipeline variables' 
     required: false
+  azure-pipeline-parameters: 
+    description: 'Set/Overwrite pipeline parameters' 
+    required: false
   azure-devops-token: 
     description: 'Paste personal access token of the user as value of secret variable:AZURE_DEVOPS_TOKEN' 
     required: true 
