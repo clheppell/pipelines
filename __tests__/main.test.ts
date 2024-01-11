@@ -213,6 +213,7 @@ describe('Testing all functions of class PipelineRunner', () => {
             reason: 1967,
             sourceBranch: null,
             sourceVersion: null,
+            templateParameters: null,
         }
         expect(mockQueueBuild).toBeCalledWith(expectedBuild, 'my-project', true);
     });
@@ -261,6 +262,7 @@ describe('Testing all functions of class PipelineRunner', () => {
             reason: 1967,
             sourceBranch: 'releases',
             sourceVersion: 'sampleSha',
+            templateParameters: null,
         }
         expect(mockQueueBuild).toBeCalledWith(expectedBuild, 'my-project', true);
         expect(core.setFailed).toBeCalled();

@@ -198,7 +198,8 @@ class PipelineRunner {
                 sourceBranch: sourceBranch,
                 sourceVersion: sourceVersion,
                 reason: BuildInterfaces.BuildReason.Triggered,
-                parameters: this.taskParameters.azurePipelineVariables
+                parameters: this.taskParameters.azurePipelineVariables,
+                templateParameters: this.taskParameters.azurePipelineParameters,
             };
             logger_1.Logger.LogPipelineTriggerInput(build);
             // Queue build
@@ -323,6 +324,14 @@ class TaskParameters {
         this._azurePipelineName = core.getInput('azure-pipeline-name', { required: true });
         this._azureDevopsToken = core.getInput('azure-devops-token', { required: true });
         this._azurePipelineVariables = core.getInput('azure-pipeline-variables', { required: false });
+        let parameters = null;
+        try {
+            parameters = JSON.parse(core.getInput('azure-pipeline-parameters', { required: false }));
+        }
+        catch (error) {
+            // Swallow
+        }
+        this._azurePipelineParameters = parameters;
     }
     static getTaskParams() {
         if (!this.taskparams) {
@@ -341,6 +350,9 @@ class TaskParameters {
     }
     get azurePipelineVariables() {
         return this._azurePipelineVariables;
+    }
+    get azurePipelineParameters() {
+        return this._azurePipelineParameters;
     }
 }
 exports.TaskParameters = TaskParameters;
