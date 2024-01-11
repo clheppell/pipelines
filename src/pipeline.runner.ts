@@ -82,6 +82,10 @@ export class PipelineRunner {
             core.debug("pipeline is not linked to same Github repo");
         }
 
+        if (this.taskParameters.azurePipelineSourceBranch) {
+            sourceBranch = this.taskParameters.azurePipelineSourceBranch;
+        }
+
         let build: BuildInterfaces.Build = {
             definition: {
                 id: buildDefinition.id

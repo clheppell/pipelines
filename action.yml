@@ -16,6 +16,9 @@ inputs:
   azure-devops-token: 
     description: 'Paste personal access token of the user as value of secret variable:AZURE_DEVOPS_TOKEN' 
     required: true 
+  azure-devops-source-branch: 
+    description: 'Source branch in Azure DevOps for deployment' 
+    required: true 
 runs: 
   using: 'node16' 
   main: 'dist/index.js' 
