@@ -14,7 +14,7 @@ export class TaskParameters {
         this._azurePipelineName = core.getInput('azure-pipeline-name', { required: true });
         this._azureDevopsToken = core.getInput('azure-devops-token', { required: true });
         this._azurePipelineVariables = core.getInput('azure-pipeline-variables', { required: false });
-        this._azurePipelineSourceBranch = core.getInput('azure-pipeline-source-branch', { required: false });
+        this._azurePipelineSourceBranch = core.getInput('azure-devops-source-branch', { required: false });
 
         let parameters = null;
         try {
