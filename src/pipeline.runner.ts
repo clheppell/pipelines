@@ -99,20 +99,25 @@ export class PipelineRunner {
         log.LogPipelineTriggerInput(build);
 
         // Queue build
-        let buildQueueResult = await buildApi.queueBuild(build, build.project.id, true);
-        if (buildQueueResult != null) {
-            log.LogPipelineTriggerOutput(buildQueueResult);
-            // If build result contains validation errors set result to FAILED
-            if (buildQueueResult.validationResults != null && buildQueueResult.validationResults.length > 0) {
-                let errorAndWarningMessage = p.getErrorAndWarningMessageFromBuildResult(buildQueueResult.validationResults);
-                core.setFailed("Errors: " + errorAndWarningMessage.errorMessage + " Warnings: " + errorAndWarningMessage.warningMessage);
-            }
-            else {
-                log.LogPipelineTriggered(pipelineName, projectName);
-                if (buildQueueResult._links != null) {
-                    log.LogOutputUrl(buildQueueResult._links.web.href);
+        try {
+            let buildQueueResult = await buildApi.queueBuild(build, build.project.id, true);
+            if (buildQueueResult != null) {
+                log.LogPipelineTriggerOutput(buildQueueResult);
+                // If build result contains validation errors set result to FAILED
+                if (buildQueueResult.validationResults != null && buildQueueResult.validationResults.length > 0) {
+                    let errorAndWarningMessage = p.getErrorAndWarningMessageFromBuildResult(buildQueueResult.validationResults);
+                    core.setFailed("Errors: " + errorAndWarningMessage.errorMessage + " Warnings: " + errorAndWarningMessage.warningMessage);
+                }
+                else {
+                    log.LogPipelineTriggered(pipelineName, projectName);
+                    if (buildQueueResult._links != null) {
+                        log.LogOutputUrl(buildQueueResult._links.web.href);
+                    }
                 }
             }
+        } catch (error) {
+            log.LogPipelineTriggerOutput(error);
+            throw error;
         }
     }
 

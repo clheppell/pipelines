@@ -203,20 +203,26 @@ class PipelineRunner {
             };
             logger_1.Logger.LogPipelineTriggerInput(build);
             // Queue build
-            let buildQueueResult = yield buildApi.queueBuild(build, build.project.id, true);
-            if (buildQueueResult != null) {
-                logger_1.Logger.LogPipelineTriggerOutput(buildQueueResult);
-                // If build result contains validation errors set result to FAILED
-                if (buildQueueResult.validationResults != null && buildQueueResult.validationResults.length > 0) {
-                    let errorAndWarningMessage = pipeline_helper_1.PipelineHelper.getErrorAndWarningMessageFromBuildResult(buildQueueResult.validationResults);
-                    core.setFailed("Errors: " + errorAndWarningMessage.errorMessage + " Warnings: " + errorAndWarningMessage.warningMessage);
-                }
-                else {
-                    logger_1.Logger.LogPipelineTriggered(pipelineName, projectName);
-                    if (buildQueueResult._links != null) {
-                        logger_1.Logger.LogOutputUrl(buildQueueResult._links.web.href);
+            try {
+                let buildQueueResult = yield buildApi.queueBuild(build, build.project.id, true);
+                if (buildQueueResult != null) {
+                    logger_1.Logger.LogPipelineTriggerOutput(buildQueueResult);
+                    // If build result contains validation errors set result to FAILED
+                    if (buildQueueResult.validationResults != null && buildQueueResult.validationResults.length > 0) {
+                        let errorAndWarningMessage = pipeline_helper_1.PipelineHelper.getErrorAndWarningMessageFromBuildResult(buildQueueResult.validationResults);
+                        core.setFailed("Errors: " + errorAndWarningMessage.errorMessage + " Warnings: " + errorAndWarningMessage.warningMessage);
+                    }
+                    else {
+                        logger_1.Logger.LogPipelineTriggered(pipelineName, projectName);
+                        if (buildQueueResult._links != null) {
+                            logger_1.Logger.LogOutputUrl(buildQueueResult._links.web.href);
+                        }
                     }
                 }
+            }
+            catch (error) {
+                logger_1.Logger.LogPipelineTriggerOutput(error);
+                throw error;
             }
         });
     }
